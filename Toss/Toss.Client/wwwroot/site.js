@@ -52,8 +52,10 @@ const readUploadedFileAsText = (inputFile) => {
         };
         temporaryFileReader.addEventListener("load", function () {
             var data = {
-                content: temporaryFileReader.result.split(',')[1]
+                content: temporaryFileReader.result.split(',')[1],
+                extension: inputFile.files[0].type
             };
+            console.log("Resolving async");
             console.log(data);
             resolve(data);
         }, false);

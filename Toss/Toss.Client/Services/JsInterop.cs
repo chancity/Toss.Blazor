@@ -38,20 +38,16 @@ namespace Toss.Client.Services
             public string Content { get; set; }
         }
 
-        public static async Task<string> GetFileData(string fileInputRef)
+        public static async Task<FileData> GetFileData(string fileInputRef)
         {
-            return (await RegisteredFunction.InvokeAsync<StringHolder>("getFileData", fileInputRef)).Content;
-            //ConsoleLog("C# just received byte[] : " + base64fileContent.Length);
-            //string res = null;
-           
-
-            //return res;
+            FileData fileData = await RegisteredFunction.InvokeAsync<FileData>("getFileData", fileInputRef);
+            ConsoleLog("Received from getFileData");
+            return fileData;           
         }
         
         public static string GetCookie()
         {
             StringHolder stringHolder = RegisteredFunction.Invoke<StringHolder>("getDocumentCookie");
-            JsInterop.ConsoleLog(stringHolder.Content);
             return stringHolder.Content;
         }
     }
