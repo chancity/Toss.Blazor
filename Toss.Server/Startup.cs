@@ -47,14 +47,14 @@ namespace Toss.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddResponseCompression(options =>
+            /*services.AddResponseCompression(options =>
             {
                 options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
                 {
                     MediaTypeNames.Application.Octet,
                     WasmMediaTypeNames.Application.Wasm,
                 });
-            });
+            });*/
             DocumentClient documentClient = new DocumentClient(new Uri(Configuration["CosmosDBEndpoint"]), Configuration["CosmosDBKey"], new JsonSerializerSettings()
             {
                 TypeNameHandling = TypeNameHandling.Objects
@@ -122,6 +122,7 @@ namespace Toss.Server
             });
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddServerSideBlazor<Toss.Client.Startup>();
 
         }
         static Func<Microsoft.AspNetCore.Authentication.RedirectContext<CookieAuthenticationOptions>, Task> ReplaceRedirector(HttpStatusCode statusCode, Func<Microsoft.AspNetCore.Authentication.RedirectContext<CookieAuthenticationOptions>, Task> existingRedirector) =>
@@ -145,41 +146,8 @@ namespace Toss.Server
             app.UseRewriter(options);
 
 
-            app.UseResponseCompression();
-            /*app.Use(async (context, next) =>
-            {
-                
-                if (!context.Request.Path.HasValue ||
-                    (context.Request.Path.Value != "/_framework/blazor.boot.json" && context.Request.Path.Value != "/_framework/blazor.webassembly.js"))
-                {
-                    await next();
-                    return;
-                }
-                var newContent = string.Empty;
-
-                var existingBody = context.Response.Body;
-
-                using (var newBody = new MemoryStream())
-                {
-                    // We set the response body to our stream so we can read after the chain of middlewares have been called.
-                    context.Response.Body = newBody;
-
-                    await next();
-
-                    // Reset the body so nothing from the latter middlewares goes to the output.
-                    context.Response.Body = new MemoryStream();
-
-                    newBody.Seek(0, SeekOrigin.Begin);
-                    context.Response.Body = existingBody;
-                    // newContent will be `Hello`.
-                    newContent = new StreamReader(newBody).ReadToEnd();
-
-                    newContent = newContent.Replace(".dll",".toto");
-
-                    // Send our modified content to the response body.
-                    await context.Response.WriteAsync(newContent);
-                }
-            });*/
+            //app.UseResponseCompression();
+            
             if (env.IsDevelopment())
             {
 
@@ -215,7 +183,8 @@ namespace Toss.Server
                     template: "/api/{controller}/{action}/{id?}");
             });
             app.UseMiddleware<CsrfTokenCookieMiddleware>();
-            app.UseBlazor<Toss.Client.Program>();
+            
+            app.UseServerSideBlazor<Toss.Client.Startup>();
         }
     }
 }
