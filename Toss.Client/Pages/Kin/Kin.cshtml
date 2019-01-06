@@ -1,0 +1,51 @@
+﻿@page "/kin"
+@using System.Threading.Tasks
+
+@inject KinClient KinClient
+
+<div class="container-fluid">
+    @if (IsLoading)
+    {
+        <img src="/giphy.gif" />
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-3 col-sm-6 my-2">
+                <div class="card text-white bg-warning   h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@AccountId</h5>
+                        <p class="card-text">@Balance</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <OrderListTable KinClient="@KinClient"></OrderListTable>
+        <hr />
+        <OfferListTable KinClient="@KinClient"></OfferListTable>
+    }
+</div>
+
+@functions
+{
+    private string AccountId { get; set; } = "";
+
+    private double Balance { get; set; } = 0;
+    private bool IsLoading { get; set; } = true;
+
+
+    protected override async Task OnInitAsync()
+    {
+        await KinClient.Init();
+
+        Console.WriteLine("Kin " + KinClient.UserId);
+
+        AccountId = KinClient.AccountId;
+        Balance = await KinClient.Balance();
+
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,51 @@
+﻿@using global::Kin.Marketplace.Models
+@if (IsLoading)
+{
+    <img src="/giphy.gif" />
+}
+else
+{
+    <h5>Offers <small class="text-muted">@OfferList.Offers.Count() offers avaliable</small></h5>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>OfferType</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var offer in OfferList.Offers)
+        {
+            <tr>
+                <td>@offer.Id</td>
+                <td>@offer.Title</td>
+                <td>@offer.Description</td>
+                <td>@offer.Amount</td>
+                <td>@offer.OfferType</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@functions {
+
+    [Parameter]
+    KinClient KinClient { get; set; }
+
+    OfferList OfferList { get; set; }
+
+    bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitAsync()
+    {
+        Console.WriteLine("OfferTable " + KinClient.UserId);
+        OfferList = await KinClient.OfferList();
+        IsLoading = false;
+        StateHasChanged();
+    }
+
+}

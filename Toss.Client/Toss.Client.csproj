@@ -4,12 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <BlazorRebuildOnFileChange>true</BlazorRebuildOnFileChange>
+	<BlazorLinkOnBuild>false</BlazorLinkOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Kin.BlockChain" Version="1.0.2" />
+    <PackageReference Include="Kin.Jwt" Version="1.0.3" />
+    <PackageReference Include="Kin.Marketplace" Version="1.0.5" />
+    <PackageReference Include="Kin.Shared" Version="1.0.2" />
+    <PackageReference Include="Kin.Stellar.Sdk" Version="1.0.3" />
     <PackageReference Include="Markdig" Version="0.15.4" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Browser" Version="0.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="0.7.0" />
+    <PackageReference Include="Nett" Version="0.9.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Toss.Shared\Toss.Shared.csproj" />
